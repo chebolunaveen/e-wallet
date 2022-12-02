@@ -1,16 +1,21 @@
+package com;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
-import lombok.*;
 
-@Entity
+@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Builder
-@Getter
-@Setter
+@Entity
 @Table(name="user")
-public class User {
+
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

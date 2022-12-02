@@ -1,3 +1,5 @@
+package com;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +15,7 @@ public class UserController {
         userService.createuser(userRequest);
     }
     @GetMapping("/userName")
-       public User getUserbyName(@RequestParam("userName") String userName) throws Exception{
-        return userService.getUserbyName(userName);
+       public Users getUserbyName(@RequestParam("userName") String userName) throws Exception{
+        return  userService.getUserbyName(userName);
     }
 }

@@ -9,8 +9,8 @@ public class walletController {
 @Autowired
     walletService walletService;
 
-       @PostMapping("/add")
-       public void createWallet(@RequestParam("userName") String userName) {
-           walletService.createWallet(userName);
-       }
+//       @PostMapping("/add")
+//       public void createWallet(@RequestParam("userName") String userName) {
+//           walletService.createWallet(userName);
+//       }
 }

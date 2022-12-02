@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Setter
 @Getter
-@Table(name="wallet")
+@Table(name="wallets")
 public class wallet {
     
     @Id
