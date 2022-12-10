@@ -52,5 +52,46 @@ public class walletService {
 //        walletRepository.save(updateWallet);
 //        return updateWallet;
 //    }
+  @KafkaListener(topics={"updatewallet"},groupId = "friends_group")
+    public void  updateWallet(String message) throws JsonProcessingException {
+        JSONObject updatewallet=objectMapper.readValue(message,JSONObject.class);
+        String fromUser= (String) updatewallet.get("fromUser");
+        String toUser= (String) updatewallet.get("toUser");
+        int transactionAmount=(Integer)updatewallet.get("amount");
+        String transactionId= (String) updatewallet.get("transactionId");
+        /*check fromUser balance if greater than transaction amount
+          if block executes otherwise
+                else block exectes
+              */
+        wallet senderwallet=walletRepository.findByuserName(fromUser);
+        if(senderwallet.getAmount()>=transactionAmount){
+            wallet sender_wallet=walletRepository.findByuserName(fromUser);
+            //updatewallet
+            sender_wallet.setAmount(sender_wallet.getAmount()-transactionAmount);
+            walletRepository.save(sender_wallet);
 
+            wallet toUserWallet=walletRepository.findByuserName(toUser);
+            toUserWallet.setAmount(toUserWallet.getAmount()+transactionAmount);
+            walletRepository.save(toUserWallet);
+
+            //push to kafka
+            JSONObject sendToTransaction=new JSONObject();
+            sendToTransaction.put("transactionId",transactionId);
+            sendToTransaction.put("TransactionStatus","SUCCESS");
+            String sendMessage=sendToTransaction.toString();
+            kafkaTemplate.send("update_transaction",sendMessage);
+
+
+        }else{
+            JSONObject sendToTransaction=new JSONObject();
+            sendToTransaction.put("TransactionStatus","FAILED");
+            sendToTransaction.put("transactionId",transactionId);
+            String sendmessage=sendToTransaction.toString();
+            kafkaTemplate.send("update_transaction",sendmessage);
+        }
+
+        //
+
+  }
 }
+
